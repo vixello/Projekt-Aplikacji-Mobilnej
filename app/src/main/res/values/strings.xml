@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">MusicPractice</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="goal_list">GOALS</string>
+    <string name="registration">Registration</string>
+    <string name="name">name</string>
+    <string name="username">username</string>
+    <string name="email">E-mail</string>
+    <string name="password">Password</string>
+    <string name="register">Register</string>
+    <string name="enter_username">username</string>
+    <string name="enter_email">E-mail</string>
+    <string name="enter_password">Password</string>
+    <string name="invalid_password">Invalid password</string>
+    <string name="invalid_email">Invalid email</string>
+</resources>

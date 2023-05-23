@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@id/goalListFragment">
+
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="myapp.musicmastery.register_login.RegisterFragment"
+        android:label="RegisterFragment" />
+    <fragment
+        android:id="@+id/goalDetailFragment"
+        android:name="myapp.musicmastery.Goal.GoalDetailFragment"
+        android:label="GoalDetailFragment"
+        tools:layout="@layout/fragment_goal_detail"/>
+    <fragment
+        android:id="@+id/goalListFragment"
+        android:name="myapp.musicmastery.Goal.GoalListFragment"
+        android:label="GoalListFragment"
+        tools:layout="@layout/fragment_goal_list">
+
+        <action
+            android:id="@+id/action_goalListFragment_to_goalDetailFragment"
+            app:destination="@id/goalDetailFragment" />
+    </fragment>
+</navigation>

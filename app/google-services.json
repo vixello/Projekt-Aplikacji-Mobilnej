@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "494609232048",
+    "project_id": "musicmastery-795ed",
+    "storage_bucket": "musicmastery-795ed.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:494609232048:android:701ef8ee2ebdd9d31a8b75",
+        "android_client_info": {
+          "package_name": "myapp.musicmastery"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "494609232048-f2ppkbenhe778a4oj44h0skmpk9madm5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "myapp.musicmastery",
+            "certificate_hash": "309e0d40a207121e2ed09d52612a01ed8db5fc4b"
+          }
+        },
+        {
+          "client_id": "494609232048-m3ocfatris5j86oit18ia0bdqk4j9dsb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDfguMHbn73QCiqXz4GGC59hRb4zDcLzTQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "494609232048-m3ocfatris5j86oit18ia0bdqk4j9dsb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
