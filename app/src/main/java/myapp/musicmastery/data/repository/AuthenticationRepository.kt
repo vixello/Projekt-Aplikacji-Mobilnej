@@ -1,11 +1,12 @@
 package myapp.musicmastery.data.repository
 
-import myapp.musicmastery.data.model.Goal
-import myapp.musicmastery.register_login.User
+import myapp.musicmastery.data.model.User
+import myapp.musicmastery.util.UIState
 
 interface AuthenticationRepository {
 
-    fun registerUser(email:String,password: String, user: User)
-    fun loginUser(user: User)
-    fun updateUser(user:User)
+    fun registerUser(email: String, password: String, user: User, result: (UIState<String>) -> Unit)
+    fun loginUser(user: User, result: (UIState<String>) -> Unit)
+    fun forgotPassword(user: User, result: (UIState<String>) -> Unit)
+    fun updateUser(user: User, result: (UIState<String>) -> Unit)
 }

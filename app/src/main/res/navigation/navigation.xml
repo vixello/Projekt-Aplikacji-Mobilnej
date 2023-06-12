@@ -3,20 +3,28 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
-    app:startDestination="@id/goalListFragment">
+    app:startDestination="@id/registerFragment">
 
     <fragment
         android:id="@+id/registerFragment"
-        android:name="myapp.musicmastery.register_login.RegisterFragment"
-        android:label="RegisterFragment" />
+        android:name="myapp.musicmastery.ui.authentication.RegisterFragment"
+        android:label="RegisterFragment" >
+        <action
+            android:id="@+id/action_registerFragment_to_goalListFragment"
+            app:destination="@id/goalListFragment" />
+    </fragment>
     <fragment
         android:id="@+id/goalDetailFragment"
-        android:name="myapp.musicmastery.Goal.GoalDetailFragment"
+        android:name="myapp.musicmastery.ui.Goal.GoalDetailFragment"
         android:label="GoalDetailFragment"
-        tools:layout="@layout/fragment_goal_detail"/>
+        tools:layout="@layout/fragment_goal_detail">
+        <action
+            android:id="@+id/action_goalDetailFragment_to_goalListFragment"
+            app:destination="@id/goalListFragment" />
+    </fragment>
     <fragment
         android:id="@+id/goalListFragment"
-        android:name="myapp.musicmastery.Goal.GoalListFragment"
+        android:name="myapp.musicmastery.ui.Goal.GoalListFragment"
         android:label="GoalListFragment"
         tools:layout="@layout/fragment_goal_list">
 

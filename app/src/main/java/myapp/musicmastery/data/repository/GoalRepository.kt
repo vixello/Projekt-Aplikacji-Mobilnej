@@ -10,5 +10,6 @@ interface  GoalRepository {
     // return happens in the listener, not directly from the function
     fun addGoal(goal: Goal, result: (UIState<String>) -> Unit)
     fun updateGoal(goal: Goal, result: (UIState<String>) -> Unit)
+    fun deleteGoal(goal: Goal, result: (UIState<String>) -> Unit)
 
 }

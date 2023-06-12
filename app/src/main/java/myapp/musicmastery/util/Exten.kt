@@ -19,6 +19,7 @@ fun View.show()
     visibility = View.VISIBLE
 }
 
-fun String.isValidEmail() =
+//
+fun String.emailValidation() =
     isNotEmpty() && android.util.Patterns.EMAIL_ADDRESS.matcher(this).matches()
 

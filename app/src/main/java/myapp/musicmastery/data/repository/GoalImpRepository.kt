@@ -13,11 +13,18 @@ class GoalImpRepository(val database:FirebaseFirestore): GoalRepository {
 
     override fun getGoals(result: (UIState<List<Goal>>) -> Unit) {
         database.collection(FireStoreTables.GOAL)
+            //Ta metoda pobiera dane z kolekcji Firestore. Zwraca obiekt reprezentujący wynik zapytania.
             .get()
+            //Jest to funkcja, która zostanie wywołana, gdy operacja pobierania danych zakończy się pomyślnie.
+            // Wewnątrz tego bloku następuje przetwarzanie otrzymanych dokumentów.
             .addOnSuccessListener {
+                //Tworzy nową pustą listę, która będzie przechowywać obiekty typu Goal.
                 val goals = arrayListOf<Goal>()
                 for ( document in it)
                 {
+                    // Konwertuje otrzymany dokument na obiekt typu Goal.
+                    // Wykorzystuje funkcję toObject(), która przekształca dokument
+                    // Firestore w obiekt na podstawie podanego typu.
                     //convert document into a goal object
                     val goal = document.toObject(Goal::class.java)
                     //add to goal list
@@ -52,6 +59,21 @@ class GoalImpRepository(val database:FirebaseFirestore): GoalRepository {
             }
     }
 
+    override fun deleteGoal(goal: Goal, result: (UIState<String>) -> Unit) {
+        val document = database.collection(FireStoreTables.GOAL).document(goal.id)
+        document
+            .delete()//pass the object
+            .addOnSuccessListener {
+                result.invoke(
+                    UIState.Success("Goal has been deleted")
+                )
+            }
+            .addOnFailureListener{
+                result.invoke(
+                    UIState.Failure(it.localizedMessage as String)
+                )
+            }
+    }
     override fun updateGoal(goal: Goal, result: (UIState<String>) -> Unit) {
         val document = database.collection(FireStoreTables.GOAL).document(goal.id)
         document

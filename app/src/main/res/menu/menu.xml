@@ -7,9 +7,9 @@
     <item
         android:id="@+id/recordFragment"
         android:icon="@drawable/ic_home"
-        android:title="HOME"/>
+        android:title="RECORDINGS"/>
     <item
         android:id="@+id/learnFragment"
         android:icon="@drawable/ic_home"
-        android:title="HOME"/>
+        android:title="LEARN"/>
 </menu>
