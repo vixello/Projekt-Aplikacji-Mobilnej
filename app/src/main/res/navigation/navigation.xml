@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
-    app:startDestination="@id/registerFragment">
+    app:startDestination="@id/loginFragment">
 
     <fragment
         android:id="@+id/registerFragment"
@@ -32,4 +32,21 @@
             android:id="@+id/action_goalListFragment_to_goalDetailFragment"
             app:destination="@id/goalDetailFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="myapp.musicmastery.ui.authentication.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_loginFragment_to_goalListFragment"
+            app:destination="@id/goalListFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_registerFragment"
+            app:destination="@id/registerFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="myapp.musicmastery.data.home.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" />
 </navigation>

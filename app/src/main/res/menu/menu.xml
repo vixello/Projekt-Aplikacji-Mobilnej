@@ -5,7 +5,7 @@
         android:icon="@drawable/ic_home"
         android:title="HOME"/>
     <item
-        android:id="@+id/recordFragment"
+        android:id="@+id/goalListFragment"
         android:icon="@drawable/ic_home"
         android:title="RECORDINGS"/>
     <item

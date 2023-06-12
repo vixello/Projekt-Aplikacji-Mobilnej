@@ -19,6 +19,10 @@ class AuthenticationViewModel @Inject constructor(val repository: Authentication
     val registers: LiveData<UIState<String>>
             get() = _registers
 
+    private val _logins= MutableLiveData<UIState<String>>()
+    //supporting val (zmienna wspomagająca), not mutable data, editable from outside of the viewmodel
+    val logins: LiveData<UIState<String>>
+        get() = _logins
 
 
     fun register(email: String, password: String, user: User) {
@@ -31,4 +35,14 @@ class AuthenticationViewModel @Inject constructor(val repository: Authentication
             _registers.value = it
         }
     }
+    fun login(email: String, password: String){
+        _logins.value = UIState.Loading
+        repository.loginUser(
+            email = email,
+            password = password
+        ){
+            _logins.value = it
+        }
+    }
+
 }
