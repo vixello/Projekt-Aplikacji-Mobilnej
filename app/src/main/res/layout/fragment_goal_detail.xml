@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/background_goal"
-    tools:context=".Goal.GoalDetailFragment">
+    tools:context=".ui.Goal.GoalDetailFragment">
 
     <!-- TODO: Update blank fragment layout -->
 
@@ -28,15 +28,17 @@
         app:layout_constraintBottom_toTopOf="@+id/goal_text"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <TextView
+    <EditText
         android:id="@+id/goal_name"
+        android:hint="Goal name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/poppins_bold"
-        android:text="Goal"
+        android:text=""
         android:textColor="@color/text_col"
-        android:textSize="24dp"
+        android:textSize="22dp"
         android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
         app:layout_constraintBottom_toTopOf="@+id/goal_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -48,6 +50,10 @@
         android:id="@+id/goal_text"
         android:layout_width="match_parent"
         android:layout_height="200dp"
+        android:inputType="textMultiLine"
+        android:overScrollMode="always"
+        android:scrollbarStyle="insideInset"
+        android:scrollbars="vertical"
         android:background="@drawable/edit_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -71,7 +77,8 @@
         android:id="@+id/progressbar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:indeterminateTint="@color/text_col"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

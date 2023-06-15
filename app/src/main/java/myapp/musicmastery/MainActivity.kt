@@ -3,8 +3,15 @@ package myapp.musicmastery
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
+import android.view.View
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.onNavDestinationSelected
+import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -12,22 +19,33 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     lateinit var navController: NavController
+    private val appBarConfiguration: AppBarConfiguration by lazy {
+        AppBarConfiguration(navController.graph)
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host) as NavHostFragment
         navController = navHostFragment.navController
 
-//        val user: MutableMap<String, Any> = HashMap()
-//        user["frist"] = "Shahzad"
-//        user["frist"] = "Afraidi"
-//        user["born"] = 1995
-//
-//        FirebaseFirestore.getInstance().collection("users")
-//            .add(user)
-//            .addOnSuccessListener { documentReference ->
-//                Log.d("TAG", "DocumentSnapshot added with ID: " + documentReference.id)
-//            }
-//            .addOnFailureListener{e -> Log.w("TAG", "Error adding document", e)}
+        val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav)
+        bottomNav?.setupWithNavController(navController)
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            if(destination.id == R.id.registerFragment || destination.id == R.id.loginFragment || destination.id == R.id.forgotPasswordFragment
+                || destination.id == R.id.goalListFragment || destination.id == R.id.goalDetailFragment) {
+                bottomNav.visibility = View.GONE
+            } else {
+
+                bottomNav.visibility = View.VISIBLE
+            }
+        }
+        setupActionBarWithNavController(navController, appBarConfiguration)
+
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return item.onNavDestinationSelected(navController)
+                ||super.onOptionsItemSelected(item)
     }
 }
