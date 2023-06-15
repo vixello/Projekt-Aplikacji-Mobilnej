@@ -1,4 +1,4 @@
-package myapp.musicmastery.ui.Goal
+package myapp.musicmastery.ui.Recording
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,6 +13,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import myapp.musicmastery.R
 import myapp.musicmastery.data.model.Goal
 import myapp.musicmastery.databinding.FragmentGoalListBinding
+import myapp.musicmastery.databinding.FragmentRecordingListBinding
+import myapp.musicmastery.databinding.FragmentRegisterBinding
 import myapp.musicmastery.oal.AuthenticationViewModel
 import myapp.musicmastery.oal.GoalViewModel
 import myapp.musicmastery.util.UIState
@@ -23,16 +25,16 @@ import myapp.musicmastery.util.toast
 
 @AndroidEntryPoint
 
-class GoalListFragment : Fragment() {
+class RecordingListFragment : Fragment() {
 
     val TAG: String = "GoalListFragment"
-    lateinit var binding: FragmentGoalListBinding
+    lateinit var binding: FragmentRecordingListBinding
     var positionToDelete: Int = -1
     var list: MutableList<Goal> = arrayListOf()
     val viewModel: GoalViewModel by viewModels()
     val authenticationViewModel: AuthenticationViewModel by viewModels()
     val adapter by lazy {
-        GoalAdapter(onItemClick = {position, item ->
+        RecordingAdapter(onItemClick = {position, item ->
             findNavController().navigate(R.id.action_goalListFragment_to_goalDetailFragment, Bundle().apply {
                 putString("type", "view")
                 putParcelable("goal",item)
@@ -52,7 +54,7 @@ class GoalListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentGoalListBinding.inflate(layoutInflater)
+        binding = FragmentRecordingListBinding.inflate(layoutInflater)
         return binding.root
     }
 
@@ -65,9 +67,6 @@ class GoalListFragment : Fragment() {
             findNavController().navigate(R.id.action_goalListFragment_to_goalDetailFragment, Bundle().apply {
                 putString("type","create")
             })
-        }
-        binding.goBack.setOnClickListener {
-            findNavController().navigate(R.id.action_goalListFragment_to_homeFragment)
         }
         //observe livedata in the fragment
         authenticationViewModel.getSession {

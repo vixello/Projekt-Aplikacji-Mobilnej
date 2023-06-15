@@ -10,14 +10,14 @@ import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import myapp.musicmastery.R
 import myapp.musicmastery.data.model.User
-import myapp.musicmastery.databinding.FragmentRegisterBinding
+import myapp.musicmastery.databinding.FragmentForgotPasswordBinding
 import myapp.musicmastery.oal.AuthenticationViewModel
 import myapp.musicmastery.util.*
 
 @AndroidEntryPoint
-class RegisterFragment : Fragment() {
+class ForgotPasswordFragment : Fragment() {
 
-    lateinit var binding: FragmentRegisterBinding
+    lateinit var binding: FragmentForgotPasswordBinding
     val viewModel: AuthenticationViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,61 +28,46 @@ class RegisterFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentRegisterBinding.inflate(layoutInflater)
+        binding = FragmentForgotPasswordBinding.inflate(layoutInflater)
         return binding.root
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         observer()
-        binding.registerButton.setOnClickListener {
-            if (validation()){
-                viewModel.register(
-                    email = binding.email.text.toString(),
-                    password = binding.password.text.toString(),
-                    username = binding.username.text.toString(),
-                    user = getUser()
-                )
+        binding.forgotButton.setOnClickListener {
+            if(validation()){
+                viewModel.forgotPassword(binding.email.text.toString())
             }
         }
+
     }
     fun observer()
     {
-        viewModel.registers.observe(viewLifecycleOwner){
+        viewModel.forgotPassword.observe(viewLifecycleOwner){
             when(it){
                 is UIState.Loading -> {
-                    binding.registerButton.setText("")
-                    binding.registerProgressbar.show()
+                    binding.forgotButton.setText("")
+                    binding.forgotProgressbar.show()
                 }
                 is UIState.Success -> {
-                    binding.registerButton.setText("REGISTER")
-                    binding.registerProgressbar.hide()
+                    binding.forgotButton.setText("SEND")
+                    binding.forgotProgressbar.hide()
                     toast(it.data)
-                    findNavController().navigate(R.id.action_registerFragment_to_homeFragment)
+//                    findNavController().navigate(R.id.ac)
                 }
                 is UIState.Failure -> {
-                    binding.registerButton.setText("REGISTER")
-                    binding.registerProgressbar.hide()
+                    binding.forgotButton.setText("SEND")
+                    binding.forgotProgressbar.hide()
                     toast(it.error)
                 }
             }
         }
     }
 
-    fun getUser(): User {
-        return User(
-            id = "",
-            email = binding.email.text.toString(),
-            username = binding.username.text.toString(),
-        )
-    }
+
 
     fun validation(): Boolean {
         var isValid = true
-
-        if (binding.username.text.isNullOrEmpty()){
-            isValid = false
-            toast(getString(R.string.enter_username))
-        }
 
         if (binding.email.text.isNullOrEmpty()){
             isValid = false
@@ -92,15 +77,6 @@ class RegisterFragment : Fragment() {
             if (!binding.email.text.toString().emailValidation()){
                 isValid = false
                 toast(getString(R.string.invalid_email))
-            }
-        }
-        if (binding.password.text.isNullOrEmpty()){
-            isValid = false
-            toast(getString(R.string.enter_password))
-        }else{
-            if (binding.password.text.toString().length < 8){
-                isValid = false
-                toast(getString(R.string.invalid_password))
             }
         }
         return isValid

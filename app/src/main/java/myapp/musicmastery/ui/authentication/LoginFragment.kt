@@ -43,7 +43,7 @@ class LoginFragment : Fragment() {
             }
         }
         binding.forgotPassword.setOnClickListener{
-
+            findNavController().navigate(R.id.action_loginFragment_to_forgotPasswordFragment)
         }
         binding.didntRegister.setOnClickListener{
             findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
@@ -62,7 +62,7 @@ class LoginFragment : Fragment() {
                     binding.loginButton.setText("LOGIN")
                     binding.loginProgressbar.hide()
                     toast(it.data)
-                    findNavController().navigate(R.id.action_loginFragment_to_goalListFragment)
+                    findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
                 }
                 is UIState.Failure -> {
                     binding.loginButton.setText("LOGIN")
@@ -103,5 +103,14 @@ class LoginFragment : Fragment() {
             }
         }
         return isValid
+    }
+
+    override fun onStart() {
+        super.onStart()
+        viewModel.getSession { user ->
+            if (user != null){
+                findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
+            }
+        }
     }
 }

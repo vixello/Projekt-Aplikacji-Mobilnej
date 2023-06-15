@@ -1,4 +1,4 @@
-package myapp.musicmastery.ui.Goal
+package myapp.musicmastery.ui.Recording
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -11,10 +11,10 @@ import java.text.SimpleDateFormat
 
 var isVisible = true
 
-class GoalAdapter(val onItemClick: (Int, Goal) -> Unit,
+class RecordingAdapter(val onItemClick: (Int, Goal) -> Unit,
                   val onEditClick: (Int, Goal) -> Unit,
                   val onDeleteClick: (Int, Goal) -> Unit)
-: RecyclerView.Adapter<GoalAdapter.ViewHolder>()
+: RecyclerView.Adapter<RecordingAdapter.ViewHolder>()
 {
     private var list: MutableList<Goal> = arrayListOf()
     val date = SimpleDateFormat(" dd MM yyyy")

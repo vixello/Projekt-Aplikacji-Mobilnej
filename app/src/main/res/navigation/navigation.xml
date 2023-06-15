@@ -10,8 +10,8 @@
         android:name="myapp.musicmastery.ui.authentication.RegisterFragment"
         android:label="RegisterFragment" >
         <action
-            android:id="@+id/action_registerFragment_to_goalListFragment"
-            app:destination="@id/goalListFragment" />
+            android:id="@+id/action_registerFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
     </fragment>
     <fragment
         android:id="@+id/goalDetailFragment"
@@ -31,6 +31,9 @@
         <action
             android:id="@+id/action_goalListFragment_to_goalDetailFragment"
             app:destination="@id/goalDetailFragment" />
+        <action
+            android:id="@+id/action_goalListFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -38,15 +41,58 @@
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
-            android:id="@+id/action_loginFragment_to_goalListFragment"
-            app:destination="@id/goalListFragment" />
-        <action
             android:id="@+id/action_loginFragment_to_registerFragment"
             app:destination="@id/registerFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_forgotPasswordFragment"
+            app:destination="@id/forgotPasswordFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/forgotPasswordFragment"
+        android:name="myapp.musicmastery.ui.authentication.ForgotPasswordFragment"
+        android:label="fragment_forgot_password"
+        tools:layout="@layout/fragment_forgot_password" />
+    <fragment
+        android:id="@+id/userFragment"
+        android:name="myapp.musicmastery.ui.Goal.UserFragment"
+        android:label="UserFragment" >
+        <action
+            android:id="@+id/action_userFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
     <fragment
         android:id="@+id/homeFragment"
-        android:name="myapp.musicmastery.data.home.HomeFragment"
-        android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        android:name="myapp.musicmastery.ui.Goal.HomeFragment"
+        android:label="HomeFragment" >
+        <action
+            android:id="@+id/action_homeFragment_to_goalListFragment"
+            app:destination="@id/goalListFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_userFragment"
+            app:destination="@id/userFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_learnFragment"
+            app:destination="@id/learnFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/learnFragment"
+        android:name="myapp.musicmastery.ui.Goal.LearnFragment"
+        android:label="LearnFragment" >
+        <action
+            android:id="@+id/action_learnFragment_to_learnDetailFragment"
+            app:destination="@id/learnDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/learnDetailFragment"
+        android:name="myapp.musicmastery.ui.Goal.LearnDetailFragment"
+        android:label="LearnDetailFragment" />
+    <fragment
+        android:id="@+id/recordingListFragment"
+        android:name="myapp.musicmastery.ui.Recording.RecordingListFragment"
+        android:label="RecordingListFragment" />
 </navigation>

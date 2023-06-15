@@ -14,6 +14,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import myapp.musicmastery.R
 import myapp.musicmastery.data.model.Goal
 import myapp.musicmastery.databinding.FragmentGoalDetailBinding
+import myapp.musicmastery.oal.AuthenticationViewModel
 import myapp.musicmastery.oal.GoalViewModel
 import myapp.musicmastery.util.UIState
 import myapp.musicmastery.util.hide
@@ -27,6 +28,7 @@ import java.util.*
 class GoalDetailFragment : Fragment(){
 
     val viewModel: GoalViewModel by viewModels()
+    val authenticationViewModel: AuthenticationViewModel by viewModels()
     lateinit var binding: FragmentGoalDetailBinding
     var edit = false
     var goalObj: Goal? = null
@@ -104,7 +106,8 @@ class GoalDetailFragment : Fragment(){
                 id = goalObj?.id?:"",
                 text = binding.goalText.text.toString(),
                 date = Date()
-            ))
+            ).apply { authenticationViewModel.getSession {
+                this.user_id = it?.id ?: "" } })
         }
         viewModel.updateGoal.observe(viewLifecycleOwner)
         {
@@ -134,11 +137,14 @@ class GoalDetailFragment : Fragment(){
     private fun create(){
         if(validateInput()){
             viewModel.addGoal(Goal(
-                name = "",
-                id = "",
+                name = binding.goalName.text.toString(),
+                id = goalObj?.id?:"",
                 text = binding.goalText.text.toString(),
                 date = Date()
-            ))
+            ).apply { authenticationViewModel.getSession {
+                println("NNNNNNNNNNNNNNN" + this.user_id)
+                this.user_id = it?.id ?: "" } })
+//                .apply { authenticationViewModel.getSession { this.user_id = it?.id ?: "" } }
         }
         viewModel.goal.observe(viewLifecycleOwner)
         {

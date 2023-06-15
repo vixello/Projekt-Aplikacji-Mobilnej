@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import myapp.musicmastery.data.model.Goal
+import myapp.musicmastery.data.model.User
 import myapp.musicmastery.data.repository.GoalRepository
 import myapp.musicmastery.util.UIState
 import javax.inject.Inject
@@ -34,9 +35,9 @@ class GoalViewModel @Inject constructor(val repository: GoalRepository): ViewMod
     val updateGoal: LiveData<UIState<String>>
         get() = _updateGoal
 
-    fun getGoals() {
+    fun getGoals(user: User?) {
         _goals.value = UIState.Loading
-        repository.getGoals {
+        repository.getGoals(user){
             _goals.value = it
         }
     }

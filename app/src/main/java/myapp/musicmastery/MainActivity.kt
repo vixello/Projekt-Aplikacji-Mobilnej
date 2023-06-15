@@ -23,6 +23,8 @@ class MainActivity : AppCompatActivity() {
         AppBarConfiguration(navController.graph)
     }
     override fun onCreate(savedInstanceState: Bundle?) {
+        supportActionBar?.hide()
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host) as NavHostFragment
@@ -32,7 +34,8 @@ class MainActivity : AppCompatActivity() {
         bottomNav?.setupWithNavController(navController)
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            if(destination.id == R.id.registerFragment || destination.id == R.id.loginFragment) {
+            if(destination.id == R.id.registerFragment || destination.id == R.id.loginFragment || destination.id == R.id.forgotPasswordFragment
+                || destination.id == R.id.goalListFragment || destination.id == R.id.goalDetailFragment) {
                 bottomNav.visibility = View.GONE
             } else {
 

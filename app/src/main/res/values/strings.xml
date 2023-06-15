@@ -18,4 +18,8 @@
     <string name="login">Login</string>
     <string name="forgotpassword">Forgot password?</string>
     <string name="didntregister">Not an user? Sign up</string>
+    <string name="send">SEND</string>
+    <string name="logout">LOGOUT</string>
+    <string name="see_goals">See goals</string>
+    <string name="recording_list">Recordings</string>
 </resources>
