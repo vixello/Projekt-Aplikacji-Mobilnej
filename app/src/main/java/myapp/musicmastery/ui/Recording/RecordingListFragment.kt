@@ -2,19 +2,17 @@ package myapp.musicmastery.ui.Recording
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
-import android.view.View.OnTouchListener
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import myapp.musicmastery.R
-import myapp.musicmastery.data.model.Goal
-import myapp.musicmastery.databinding.FragmentGoalListBinding
+import myapp.musicmastery.data.model.Recording
+import myapp.musicmastery.databinding.FragmentRecordingListBinding
 import myapp.musicmastery.oal.AuthenticationViewModel
-import myapp.musicmastery.oal.GoalViewModel
+import myapp.musicmastery.oal.RecordingViewModel
 import myapp.musicmastery.util.UIState
 import myapp.musicmastery.util.hide
 import myapp.musicmastery.util.show
@@ -25,26 +23,26 @@ import myapp.musicmastery.util.toast
 
 class RecordingListFragment : Fragment() {
 
-    val TAG: String = "GoalListFragment"
-    lateinit var binding: FragmentGoalListBinding
+    val TAG: String = "RecordingListFragment"
+    lateinit var binding: FragmentRecordingListBinding
     var positionToDelete: Int = -1
-    var list: MutableList<Goal> = arrayListOf()
-    val viewModel: GoalViewModel by viewModels()
+    var list: MutableList<Recording> = arrayListOf()
+    val viewModel: RecordingViewModel by viewModels()
     val authenticationViewModel: AuthenticationViewModel by viewModels()
     val adapter by lazy {
         RecordingAdapter(onItemClick = {position, item ->
-            findNavController().navigate(R.id.action_goalListFragment_to_goalDetailFragment, Bundle().apply {
+            findNavController().navigate(R.id.action_recordingListFragment_to_recordingDetailFragment, Bundle().apply {
                 putString("type", "view")
-                putParcelable("goal",item)
+                putParcelable("recording",item)
             })
         }, onEditClick = {position, item ->
-            findNavController().navigate(R.id.action_goalListFragment_to_goalDetailFragment, Bundle().apply {
+            findNavController().navigate(R.id.action_recordingListFragment_to_recordingDetailFragment, Bundle().apply {
                 putString("type", "edit")
-                putParcelable("goal",item)
+                putParcelable("recording",item)
             })
         }, onDeleteClick = {position, item ->
             positionToDelete = position
-            viewModel.deleteGoal(item)
+            viewModel.deleteRecording(item)
         })
     }
 
@@ -52,7 +50,7 @@ class RecordingListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentGoalListBinding.inflate(layoutInflater)
+        binding = FragmentRecordingListBinding.inflate(layoutInflater)
         return binding.root
     }
 
@@ -62,16 +60,16 @@ class RecordingListFragment : Fragment() {
         binding.recycleView.adapter = adapter
         binding.recycleView.itemAnimator = null
         binding.createBttn.setOnClickListener {
-            findNavController().navigate(R.id.action_goalListFragment_to_goalDetailFragment, Bundle().apply {
+            findNavController().navigate(R.id.action_recordingListFragment_to_recordingDetailFragment, Bundle().apply {
                 putString("type","create")
             })
         }
         //observe livedata in the fragment
         authenticationViewModel.getSession {
-            viewModel.getGoals(it)
+            viewModel.getRecordings(it)
         }
         adapter.setVisibility(true)
-        viewModel.goal.observe(viewLifecycleOwner)
+        viewModel.recording.observe(viewLifecycleOwner)
         {
             //state = it
             when(it){
@@ -91,7 +89,7 @@ class RecordingListFragment : Fragment() {
                 }
             }
         }
-        viewModel.deleteGoal.observe(viewLifecycleOwner)
+        viewModel.deleteRecording.observe(viewLifecycleOwner)
         {
             //state = it
             when(it){

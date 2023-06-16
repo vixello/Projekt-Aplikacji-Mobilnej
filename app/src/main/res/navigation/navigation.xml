@@ -31,6 +31,9 @@
         <action
             android:id="@+id/action_goalListFragment_to_goalDetailFragment"
             app:destination="@id/goalDetailFragment" />
+        <action
+            android:id="@+id/action_goalListFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -88,4 +91,21 @@
         android:id="@+id/learnDetailFragment"
         android:name="myapp.musicmastery.ui.Goal.LearnDetailFragment"
         android:label="LearnDetailFragment" />
+    <fragment
+        android:id="@+id/recordingListFragment"
+        android:name="myapp.musicmastery.ui.Recording.RecordingListFragment"
+        android:label="RecordingListFragment" >
+        <action
+            android:id="@+id/action_recordingListFragment_to_recordingDetailFragment"
+            app:destination="@id/recordingDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/recordingDetailFragment"
+        android:name="myapp.musicmastery.ui.Recording.RecordingDetailFragment"
+        android:label="fragment_recording_detail"
+        tools:layout="@layout/fragment_recording_detail" >
+        <action
+            android:id="@+id/action_recordingDetailFragment_to_recordingListFragment"
+            app:destination="@id/recordingListFragment" />
+    </fragment>
 </navigation>

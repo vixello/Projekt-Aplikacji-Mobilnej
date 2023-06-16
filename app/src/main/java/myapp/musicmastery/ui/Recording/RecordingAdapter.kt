@@ -6,17 +6,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import myapp.musicmastery.data.model.Goal
+import myapp.musicmastery.data.model.Recording
 import myapp.musicmastery.databinding.ItemViewBinding
 import java.text.SimpleDateFormat
 
 var isVisible = true
 
-class RecordingAdapter(val onItemClick: (Int, Goal) -> Unit,
-                  val onEditClick: (Int, Goal) -> Unit,
-                  val onDeleteClick: (Int, Goal) -> Unit)
+class RecordingAdapter(val onItemClick: (Int, Recording) -> Unit,
+                  val onEditClick: (Int, Recording) -> Unit,
+                  val onDeleteClick: (Int, Recording) -> Unit)
 : RecyclerView.Adapter<RecordingAdapter.ViewHolder>()
 {
-    private var list: MutableList<Goal> = arrayListOf()
+    private var list: MutableList<Recording> = arrayListOf()
     val date = SimpleDateFormat(" dd MM yyyy")
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -29,7 +30,7 @@ class RecordingAdapter(val onItemClick: (Int, Goal) -> Unit,
         val item = list[position]
         holder.bind(item)
     }
-    fun updateList(list: MutableList<Goal>)
+    fun updateList(list: MutableList<Recording>)
     {
         this.list = list
         notifyDataSetChanged()
@@ -47,7 +48,7 @@ class RecordingAdapter(val onItemClick: (Int, Goal) -> Unit,
     {
 
         @SuppressLint("SetTextI18n")
-        fun bind(item: Goal)
+        fun bind(item: Recording)
         {
 
             if(isVisible){

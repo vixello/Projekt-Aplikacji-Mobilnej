@@ -14,8 +14,8 @@ import java.util.*
 class GoalImpRepository(val database:FirebaseFirestore): GoalRepository {
 
     override fun getGoals(user: User?, result: (UIState<List<Goal>>) -> Unit) {
-        println("NAAAAAAAAAAAAAAAAAA"+user?.id)
-        println("NAAAAAAAAAAAAAAAAAA"+FireStoreTables.USER_ID)
+//        println("NAAAAAAAAAAAAAAAAAA"+user?.id)
+//        println("NAAAAAAAAAAAAAAAAAA"+FireStoreTables.USER_ID)
 
         database.collection(FireStoreTables.GOAL)
             .whereEqualTo(FireStoreTables.USER_ID,user?.id)
@@ -32,9 +32,9 @@ class GoalImpRepository(val database:FirebaseFirestore): GoalRepository {
                     // Konwertuje otrzymany dokument na obiekt typu Goal.
                     // Wykorzystuje funkcję toObject(), która przekształca dokument
                     // Firestore w obiekt na podstawie podanego typu.
-                    //convert document into a goal object
+                    //convert document into a recording object
                     val goal = document.toObject(Goal::class.java)
-                    //add to goal list
+                    //add to recording list
                     goals.add(goal)
                 }
                 //pas the list to result
@@ -53,7 +53,7 @@ class GoalImpRepository(val database:FirebaseFirestore): GoalRepository {
 //        val documentuser = database.collection(FireStoreTables.USER).document()
         val document = database.collection(FireStoreTables.GOAL).document()
         goal.id = document.id
-//        goal.user_id = documentuser.id
+//        recording.user_id = documentuser.id
         document
             .set(goal)//pass the object
             .addOnSuccessListener {

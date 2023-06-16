@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/background_goal"
-    tools:context=".ui.Goal.GoalListFragment">
+    tools:context=".ui.Recording.RecordingListFragment">
 
     <!-- TODO: Update blank fragment layout -->
 

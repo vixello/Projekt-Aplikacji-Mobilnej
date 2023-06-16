@@ -179,7 +179,7 @@ class GoalDetailFragment : Fragment(){
                 "view" -> {
                     edit = false
                     binding.goalText.isEnabled = false
-                    goalObj = arguments?.getParcelable("goal")
+                    goalObj = arguments?.getParcelable("recording")
                     binding.goalName.setText(goalObj?.name)
                     binding.goalText.setText(goalObj?.text)
                     binding.updateButton.hide()
@@ -191,7 +191,7 @@ class GoalDetailFragment : Fragment(){
                 }
                 "edit" -> {
                     edit = true
-                    goalObj = arguments?.getParcelable("goal")
+                    goalObj = arguments?.getParcelable("recording")
                     binding.goalName.setText(goalObj?.name)
                     binding.goalText.setText(goalObj?.text)
                     binding.updateButton.setText("update")

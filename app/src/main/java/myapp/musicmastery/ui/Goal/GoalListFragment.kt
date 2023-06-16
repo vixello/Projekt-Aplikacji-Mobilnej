@@ -66,6 +66,9 @@ class GoalListFragment : Fragment() {
                 putString("type","create")
             })
         }
+        binding.goBack.setOnClickListener {
+            findNavController().navigate(R.id.action_goalListFragment_to_homeFragment)
+        }
         //observe livedata in the fragment
         authenticationViewModel.getSession {
             viewModel.getGoals(it)
