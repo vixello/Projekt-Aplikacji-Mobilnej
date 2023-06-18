@@ -23,6 +23,8 @@ class MainActivity : AppCompatActivity() {
         AppBarConfiguration(navController.graph)
     }
     override fun onCreate(savedInstanceState: Bundle?) {
+        supportActionBar?.hide()
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host) as NavHostFragment

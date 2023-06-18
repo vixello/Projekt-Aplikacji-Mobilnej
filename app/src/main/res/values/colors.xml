@@ -14,4 +14,8 @@
     <color name="button">#E71D36</color>
     <color name="registr_input">#D9D9D9</color>
     <color name="text_col">#E71D36</color>
+    <color name="item_rec_back">#F6A6A9</color>
+    <color name="item_rec_day">#FFF4ED</color>
+    <color name="item_rec_text">#271F30</color>
+    <color name="item_rec_text2">#E53E53</color>
 </resources>

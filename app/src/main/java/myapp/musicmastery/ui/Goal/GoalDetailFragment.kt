@@ -142,7 +142,7 @@ class GoalDetailFragment : Fragment(){
                 text = binding.goalText.text.toString(),
                 date = Date()
             ).apply { authenticationViewModel.getSession {
-                println("NNNNNNNNNNNNNNN" + this.user_id)
+//                println("NNNNNNNNNNNNNNN" + this.user_id)
                 this.user_id = it?.id ?: "" } })
 //                .apply { authenticationViewModel.getSession { this.user_id = it?.id ?: "" } }
         }
@@ -179,7 +179,7 @@ class GoalDetailFragment : Fragment(){
                 "view" -> {
                     edit = false
                     binding.goalText.isEnabled = false
-                    goalObj = arguments?.getParcelable("goal")
+                    goalObj = arguments?.getParcelable("recording")
                     binding.goalName.setText(goalObj?.name)
                     binding.goalText.setText(goalObj?.text)
                     binding.updateButton.hide()
@@ -191,7 +191,7 @@ class GoalDetailFragment : Fragment(){
                 }
                 "edit" -> {
                     edit = true
-                    goalObj = arguments?.getParcelable("goal")
+                    goalObj = arguments?.getParcelable("recording")
                     binding.goalName.setText(goalObj?.name)
                     binding.goalText.setText(goalObj?.text)
                     binding.updateButton.setText("update")

@@ -157,4 +157,7 @@ class AuthImpRepository(val auth: FirebaseAuth,
         appPreferences.edit().putString(SharedPrefConst.USER_SESSION,null).apply()
         result.invoke()
     }
+
+    // Retrieve files for a specific user within a date range
+
 }

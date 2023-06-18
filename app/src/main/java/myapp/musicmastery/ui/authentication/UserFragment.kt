@@ -51,16 +51,14 @@ class UserFragment : Fragment() {
             }
         }
 
+        authenticationViewModel.getSession { session ->
+            val username = session?.username ?: ""
+            // Use the retrieved username here
+            binding.username.text = session?.username
 
-        binding.username.text = getUser().username
-//        println("NAAAAAAAAAAAAAAAAAAAAAAAAAAAA"+getUser().username)
-
+//            println("Username: $username")
+        }
 
     }
-    fun getUser(): User {
-        return User(
-            id = "",
-            username = binding.username.text.toString(),
-        )
-    }
+
 }

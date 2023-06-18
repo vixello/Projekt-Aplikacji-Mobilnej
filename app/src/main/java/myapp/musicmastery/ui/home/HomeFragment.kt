@@ -16,7 +16,9 @@ import myapp.musicmastery.data.model.Goal
 import myapp.musicmastery.databinding.FragmentHomeBinding
 import myapp.musicmastery.oal.AuthenticationViewModel
 import myapp.musicmastery.oal.GoalViewModel
+import myapp.musicmastery.oal.RecordingViewModel
 import myapp.musicmastery.util.UIState
+import myapp.musicmastery.util.hide
 import myapp.musicmastery.util.toast
 
 
@@ -30,6 +32,9 @@ class HomeFragment : Fragment() {
     var list: MutableList<Goal> = arrayListOf()
     var positionToDelete: Int = -1
     val viewModel: GoalViewModel by viewModels()
+    val recordingViewModel: RecordingViewModel by viewModels()
+    var goalObj: Goal? = null
+
     val adapter by lazy {
         GoalAdapter(onItemClick = { position, item ->
             findNavController().navigate(
@@ -88,7 +93,30 @@ class HomeFragment : Fragment() {
         }
         binding.recycleView.scrollToPosition(0)
         adapter.setVisibility(false)
+        authenticationViewModel.getSession { session ->
+            // Use the retrieved username here
+            binding.userName.text = session?.username
 
+//            println("Username: $username")
+        }
+
+        authenticationViewModel.getSession { user ->
+            recordingViewModel.calculateTotalDurationForUserInPastWeek(user) {  result ->
+                when (result) {
+                    is UIState.Success -> {
+                        val totalDuration = result.data
+                        binding.practiceTime.text = totalDuration
+                    }
+                    is UIState.Failure -> {
+                        val errorMessage = result.error
+                        // Handle the failure case, e.g., display an error message
+                    }
+                    else -> {}
+                }
+
+            }
+        }
+//        println("BOOOOOOOSOSOSOSOSOS$username")
 //        for (i in 0 until binding.recycleView.childCount) {
 //            val viewHolder =
 //                binding.recycleView.findViewHolderForAdapterPosition(i) as? GoalAdapter.ViewHolder
@@ -96,7 +124,6 @@ class HomeFragment : Fragment() {
 //            viewHolder?.binding?.deleteButton?.visibility = View.INVISIBLE
 //        }
         // Set the desired layout manager (e.g., LinearLayoutManager)
-
 
         binding.seeGoalsButton.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_goalListFragment)
@@ -106,4 +133,10 @@ class HomeFragment : Fragment() {
         }
 
     }
+
+    private fun update(){
+        val username = authenticationViewModel.getSession {
+            goalObj?.user_id = it?.id ?: "" }
+    }
+
 }

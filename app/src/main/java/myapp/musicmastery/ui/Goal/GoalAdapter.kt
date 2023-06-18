@@ -70,6 +70,7 @@ class GoalAdapter(val onItemClick: (Int, Goal) -> Unit,
             binding.editButton.setOnClickListener { onEditClick.invoke(bindingAdapterPosition, item) }
             binding.deleteButton.setOnClickListener { onDeleteClick.invoke(bindingAdapterPosition , item) }
             binding.goalText.setOnClickListener { onItemClick.invoke(bindingAdapterPosition , item) }
+            binding.goalName.setOnClickListener { onItemClick.invoke(bindingAdapterPosition , item) }
         }
 //        fun bind(item: Goal)
 //        {

@@ -59,7 +59,7 @@ class AuthenticationViewModel @Inject constructor(val repository: Authentication
             _logins.value = it
         }
     }
-
+//    fun getUsername()
     fun forgotPassword(email: String){
         _forgotPassword.value = UIState.Loading
         repository.forgotPassword(email){
