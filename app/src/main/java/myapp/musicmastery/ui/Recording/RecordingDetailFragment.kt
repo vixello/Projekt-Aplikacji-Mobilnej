@@ -30,6 +30,7 @@ import myapp.musicmastery.oal.RecordingViewModel
 import com.github.dhaval2404.imagepicker.ImagePicker
 import android.Manifest;
 import android.content.ContentResolver
+import android.content.ContentUris
 import android.content.Context
 import android.media.MediaMetadataRetriever
 import android.media.MediaPlayer
@@ -40,6 +41,7 @@ import myapp.musicmastery.data.repository.RecordingRepository.ContentResolverWra
 import myapp.musicmastery.util.*
 
 import java.io.File
+import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -54,7 +56,7 @@ class RecordingDetailFragment : Fragment(){
     lateinit var binding: FragmentRecordingDetailBinding
     var edit = false
     var recordingObj: Recording? = null
-    val recordingUris: MutableList<Uri> = arrayListOf()
+    private val recordingUris: MutableList<Uri> = arrayListOf()
     private lateinit var contentResolver: ContentResolver
 
     override fun onAttach(context: Context) {
@@ -62,7 +64,7 @@ class RecordingDetailFragment : Fragment(){
         contentResolver = requireContext().contentResolver
     }
 
-    private val requestPermissionLauncher =
+/*    private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
             if (isGranted) {
                 // Permission is granted, proceed with file picking logic
@@ -72,19 +74,8 @@ class RecordingDetailFragment : Fragment(){
                 // Permission is not granted, handle accordingly
                 // You can show a toast or an error message to the user
             }
-        }
+        }*/
 
-    private val filePickerLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                val data: Intent? = result.data
-                data?.data?.let { uri ->
-                    handlePickedFile(uri)
-                    println("NOOOOOOOO$uri")
-
-                }
-            }
-        }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -102,6 +93,7 @@ class RecordingDetailFragment : Fragment(){
         val heightInDp = 200
         val density = resources.displayMetrics.density
         val heightInPixels = (heightInDp * density).toInt()
+
         binding.recordingText.layoutParams.height = heightInPixels
 
         //update/add gaodl
@@ -132,6 +124,8 @@ class RecordingDetailFragment : Fragment(){
             else
             {
                 create()
+                onDonePressing()
+
                 findNavController().navigate(R.id.action_recordingDetailFragment_to_recordingListFragment)
             }
         }
@@ -139,6 +133,51 @@ class RecordingDetailFragment : Fragment(){
                 pickFile()
         }
 
+        //PLAYEER
+        viewModel.currentPlaybackPosition.observe(viewLifecycleOwner) { position ->
+            binding.seekbar.progress = position ?: 0
+        }
+        // Set up click listeners for the playback buttons
+
+//        binding.playButton.setOnClickListener {
+//            viewModel.startPlayback("musicmastery-795ed.appspot.com/app/tmp3290886599343592465.tmp"){
+//                    binding.seekbar.progress = 0
+//                }
+//
+//        }
+        binding.playButton.setOnClickListener {
+            val recording = recordingObj
+            // Get the recording object for the current view
+            val recordingFileName = recording?.fileName.toString()
+            val fileExtension = recordingFileName.substringAfterLast(".", "")
+
+            val fileName = "/"+ recordingObj?.id.toString()+"."+fileExtension // Replace with your actual file name
+            viewModel.getFileUrlFromFirebaseStorage(fileName) { result ->
+                when (result) {
+                    is UIState.Success -> {
+                        val fileUrl = result.data
+                        viewModel.startPlayback(fileUrl) {
+                            binding.seekbar.progress = 0
+                        }
+                        toast(result.data)
+
+                    }
+                    is UIState.Failure -> {
+                        // Handle the failure to fetch the file URL
+                        toast(result.error)
+                    }
+                    else -> {}
+                }
+            }
+        }
+
+        binding.pauseButton.setOnClickListener {
+            viewModel.pausePlayback()
+        }
+
+        binding.stopButton.setOnClickListener {
+            viewModel.stopPlayback()
+        }
     }
 /*    private fun isReadStoragePermissionGranted(): Boolean {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -164,7 +203,17 @@ class RecordingDetailFragment : Fragment(){
         }
         filePickerLauncher.launch(intent)
     }
+    private val filePickerLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data: Intent? = result.data
+                data?.data?.let { uri ->
+                    println("NOOOOOOOO$uri")
+                    handlePickedFile(uri)
 
+                }
+            }
+        }
     @SuppressLint("Range")
     private fun handlePickedFile(uri: Uri) {
         // Access the picked file using the URI
@@ -178,6 +227,7 @@ class RecordingDetailFragment : Fragment(){
             if (cursor.moveToFirst()) {
                 val displayName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
                 // Use the file name as needed
+//                println("FILENAME"+displayName)
             }
         }
     }
@@ -193,7 +243,65 @@ class RecordingDetailFragment : Fragment(){
         return ""
     }
 
-     fun getAudioFileDuration(fileUri: Uri): Long? {
+
+//    fun resolveContentUriToFileUri(contentUri: Uri, contentResolver: ContentResolver): Uri? {
+//        val projection = arrayOf(MediaStore.MediaColumns._ID)
+//        var fileUri: Uri? = null
+//
+//        contentResolver.query(contentUri, projection, null, null, null)?.use { cursor ->
+//            if (cursor.moveToFirst()) {
+//                val columnIndex = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns._ID)
+//                val fileId = cursor.getString(columnIndex)
+//                if (fileId != null) {
+//                    fileUri = Uri.withAppendedPath(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, fileId)
+//                }
+//            }
+//        }
+//
+//        return fileUri
+//    }
+//    private fun resolveContentUriToFileUri(contentUri: Uri): Uri? {
+//        val inputStream = contentResolver.openInputStream(contentUri)
+//        val tempFile = createTempFile()
+//        val outputStream = FileOutputStream(tempFile)
+//
+//        inputStream?.use { input ->
+//            outputStream.use { output ->
+//                input.copyTo(output)
+//            }
+//        }
+//
+//        return Uri.fromFile(tempFile)
+//    }
+//    private fun resolveContentUriToFileUri(contentUri: Uri, uniqueId: String, fileEntension: String): Uri? {
+//        val inputStream = contentResolver.openInputStream(contentUri)
+//        val tempFile = createTempFile(uniqueId+uniqueId, fileEntension)
+//        val outputStream = FileOutputStream(tempFile)
+//        inputStream?.use { input ->
+//            outputStream.use { output ->
+//                input.copyTo(output)
+//            }
+//        }
+//
+//        return Uri.fromFile(tempFile)
+//    }
+
+    private fun resolveContentUriToFileUri(contentUri: Uri, uniqueId: String, fileExtension: String): Uri? {
+        val inputStream = contentResolver.openInputStream(contentUri)
+        val tempFileName = "$uniqueId.$fileExtension"
+        val tempFile = File(context?.filesDir, tempFileName)
+        val outputStream = FileOutputStream(tempFile)
+
+        inputStream?.use { input ->
+            outputStream.use { output ->
+                input.copyTo(output)
+            }
+        }
+
+        return Uri.fromFile(tempFile)
+    }
+
+    fun getAudioFileDuration(fileUri: Uri): Long? {
         val contentResolver = RecordingRepository.ContentResolverWrapper.contentResolver
         val mediaPlayer = MediaPlayer.create(context, fileUri)
         val duration = mediaPlayer.duration.toLong()
@@ -220,25 +328,38 @@ class RecordingDetailFragment : Fragment(){
 
     private fun onDonePressing(){
 
-        if(recordingUris.isNullOrEmpty()){
-            viewModel.uploadRecording(recordingUris.first()){
-                it ->
-                when(it){
-                    is UIState.Loading ->{
-                        binding.progressbar.show()
-                    }
-                    is UIState.Success -> {
-                        binding.progressbar.hide()
+        if(recordingUris.isNotEmpty()){
+            val recordingFileName = recordingObj?.fileName.toString()
+            val fileExtension = recordingFileName.substringAfterLast(".", "")
 
-                    }
-                    is UIState.Failure ->{
-                        binding.progressbar.hide()
-                        toast(it.error)
+            println("IDERCORD"+   recordingObj?.id)
+            println("IDERCORD"+   recordingObj?.id.toString())
+            println("FILEEXT"+   fileExtension)
+            val resolvedFileUri =
+                recordingObj?.let { resolveContentUriToFileUri(recordingUris.first(), it.id, fileExtension) }
+            if (resolvedFileUri != null) {
+                println("bababababasss"+ resolvedFileUri)
+                viewModel.uploadRecording(resolvedFileUri){
+                    when(it){
+                        is UIState.Loading ->{
+                            binding.progressbar.show()
+                        }
+                        is UIState.Success -> {
+                            binding.progressbar.hide()
+
+                        }
+                        is UIState.Failure ->{
+                            binding.progressbar.hide()
+                            toast(it.error)
+                        }
                     }
                 }
             }
         }
-
+        else
+        {
+            println("Failed to get recordingUris")
+        }
     }
 
     private fun updateRecording(){
@@ -317,10 +438,10 @@ class RecordingDetailFragment : Fragment(){
             } }
             if (duration != null) {
                 // Do something with the duration
-                println("NANABABA Audio duration: $duration milliseconds")
+                println(" Audio duration: $duration milliseconds")
             } else {
                 // Handle the case when duration is null
-                println("NANABABA Unable to retrieve audio duration")
+                println("Unable to retrieve audio duration")
             }
 
             binding.audioName.text = recordingName
@@ -336,7 +457,6 @@ class RecordingDetailFragment : Fragment(){
                 this.user_id = it?.id ?: "" } })
 //                .apply { authenticationViewModel.getSession { this.user_id = it?.id ?: "" } }
         }
-                println("NANNANANAANANNAANAN"+ getRecordingUrls())
 
         viewModel.recording.observe(viewLifecycleOwner)
         {
@@ -377,6 +497,7 @@ class RecordingDetailFragment : Fragment(){
                     binding.audioName.setText(recordingObj?.fileName)
                     binding.duration.setText(recordingObj?.duration)
                     binding.updateButton.hide()
+                    binding.addAudio.hide()
 
             }
                 "create" -> {

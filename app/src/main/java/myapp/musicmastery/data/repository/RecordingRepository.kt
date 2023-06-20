@@ -18,7 +18,12 @@ interface RecordingRepository {
     fun getRecordingForUserInDateRange(user: User?, startDate: Date, endDate: Date, result: (UIState<List<Recording>>) -> Unit)
     fun calculateTotalDurationForUserInPastWeek(user: User?, result: (UIState<String>) -> Unit)
     suspend fun uploadRecording(fileUri: Uri, onResult: (UIState<Uri>)->Unit)
-
+    fun startPlayback(fileUrl: String, onCompletion: () -> Unit)
+    fun getFileUrlFromFirebaseStorage(fileName: String, onResult: (UIState<String>) -> Unit)
+    fun pausePlayback()
+    fun stopPlayback()
+    fun seekToPosition(position: Int)
+    fun currentPlaybackPosition(): Int
     fun getFileNameFromUri(uri: Uri): String
     fun getAudioFileDuration(fileUri: Uri): Long?
     object ContentResolverWrapper {

@@ -42,7 +42,12 @@ class RecordingViewModel @Inject constructor(val repository: RecordingRepository
     val updateRecording: LiveData<UIState<String>>
         get() = _updateRecording
 
+    private val _currentPlaybackPosition = MutableLiveData<Int>()
+    val currentPlaybackPosition: LiveData<Int> get() = _currentPlaybackPosition
 
+    fun updateCurrentPlaybackPosition(position: Int) {
+        _currentPlaybackPosition.value = position
+    }
     fun getAudioFileDuration(fileUri: Uri): Long? {
         val contentResolver = RecordingRepository.ContentResolverWrapper.contentResolver
 //
@@ -110,5 +115,21 @@ class RecordingViewModel @Inject constructor(val repository: RecordingRepository
     fun calculateTotalDurationForUserInPastWeek(user: User?, onResult:(UIState<String>) ->Unit){
         repository.calculateTotalDurationForUserInPastWeek(user, onResult)
     }
+
+    fun startPlayback(fileUrl: String, onCompletion: () -> Unit) {
+        repository.startPlayback(fileUrl, onCompletion)
+    }
+
+    fun pausePlayback() {
+        repository.pausePlayback()
+    }
+
+    fun stopPlayback() {
+        repository.stopPlayback()
+    }
+    fun getFileUrlFromFirebaseStorage(fileName: String, onResult: (UIState<String>) -> Unit){
+        repository.getFileUrlFromFirebaseStorage(fileName,onResult)
+    }
+
 
 }

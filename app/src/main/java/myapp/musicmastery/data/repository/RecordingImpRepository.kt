@@ -1,11 +1,10 @@
 package myapp.musicmastery.data.repository
 
 import android.annotation.SuppressLint
-import android.content.ContentResolver
-import android.media.MediaMetadataRetriever
+import android.content.ContentValues.TAG
 import android.media.MediaPlayer
 import android.net.Uri
-import androidx.core.content.ContentProviderCompat.requireContext
+import android.util.Log
 import com.google.firebase.FirebaseException
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
@@ -25,7 +24,7 @@ import java.util.*
 
 class RecordingImpRepository(val database: FirebaseFirestore, val storageReference: StorageReference):RecordingRepository {
 
-
+    private var mediaPlayer: MediaPlayer? = null
     override fun getRecording(user: User?, result: (UIState<List<Recording>>) -> Unit) {
         database.collection(FirebaseStorageConstants.RECORDING)
             .whereEqualTo(FireStoreTables.USER_ID,user?.id)
@@ -110,10 +109,10 @@ class RecordingImpRepository(val database: FirebaseFirestore, val storageReferen
     }
     override suspend fun uploadRecording(fileUri: Uri, onResult: (UIState<Uri>) -> Unit) {
         try{
-            val fileName = getFileNameFromUri(fileUri)
+//            val fileName = getFileNameFromUri(fileUri)
             val uri: Uri = withContext(Dispatchers.IO){
-                storageReference
-                    .child(fileName)
+                storageReference.child(fileUri.lastPathSegment?: "${System.currentTimeMillis()}")
+//                    .child(fileName)
                     .putFile(fileUri)
                     .await()
                     .storage
@@ -138,30 +137,30 @@ class RecordingImpRepository(val database: FirebaseFirestore, val storageReferen
     @SuppressLint("Recycle")
     override fun getAudioFileDuration(fileUri: Uri): Long? {
         val contentResolver = RecordingRepository.ContentResolverWrapper.contentResolver
-//
-//        val retriever = MediaMetadataRetriever()
-//        retriever.setDataSource(contentResolver, fileUri)
-//
-//        val durationString = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
-//        return durationString?.toLongOrNull()
-//
-//        return null
-//        val mediaPlayer = MediaPlayer()
-//        try {
-//            mediaPlayer.setDataSource(requireContext(), fileUri)
-//            mediaPlayer.prepare()
-//            val duration = mediaPlayer.duration
-//            mediaPlayer.release()
-//            return duration.toLong()
-//        } catch (e: Exception) {
-//            e.printStackTrace()
-//        } finally {
-//            mediaPlayer.release()
-//        }
-//        return null
-//        val mediaPlayer = MediaPlayer.create(context, fileUri)
-//        val duration = mediaPlayer.duration.toLong()
-//        mediaPlayer.release()
+/*
+        val retriever = MediaMetadataRetriever()
+        retriever.setDataSource(contentResolver, fileUri)
+
+        val durationString = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
+        return durationString?.toLongOrNull()
+
+        return null
+        val mediaPlayer = MediaPlayer()
+        try {
+            mediaPlayer.setDataSource(requireContext(), fileUri)
+            mediaPlayer.prepare()
+            val duration = mediaPlayer.duration
+            mediaPlayer.release()
+            return duration.toLong()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        } finally {
+            mediaPlayer.release()
+        }
+        return null
+        val mediaPlayer = MediaPlayer.create(context, fileUri)
+        val duration = mediaPlayer.duration.toLong()
+        mediaPlayer.release()*/
         val duration = null
         return duration
     }
@@ -257,6 +256,86 @@ class RecordingImpRepository(val database: FirebaseFirestore, val storageReferen
         }
 
         return formattedDuration.toString()
+    }
+
+
+//    override fun startPlayback(fileUrl: String, onCompletion: () -> Unit) {
+//        mediaPlayer = MediaPlayer().apply {
+//            setDataSource(fileUrl)
+//            prepareAsync()
+//            setOnPreparedListener { mediaPlayer ->
+//                mediaPlayer.start()
+//            }
+//            setOnCompletionListener { mediaPlayer ->
+//                onCompletion.invoke()
+//            }
+//        }
+//    }
+//
+//    override fun startPlayback(fileUrl: String, onCompletion: () -> Unit) {
+//        storageReference.child(fileUrl).downloadUrl
+//            .addOnSuccessListener { uri ->
+//                MediaPlayer().apply {
+//                    setDataSource(uri.toString())
+//                    prepareAsync()
+//                    setOnPreparedListener {
+//                        start()
+//                    }
+//                    setOnCompletionListener {
+//                        onCompletion.invoke()
+//                    }
+//                }
+//            }
+//            .addOnFailureListener { exception ->
+//                // Handle the failure to get the download URL
+//                Log.e(TAG, "Failed to get download URL: ${exception.message}")
+//            }
+//    }
+
+    override fun startPlayback(fileUrl: String, onCompletion: () -> Unit) {
+        if (mediaPlayer != null && mediaPlayer?.isPlaying == false) {
+            mediaPlayer?.start()
+            return
+        }
+
+        mediaPlayer = MediaPlayer().apply {
+            setDataSource(fileUrl)
+            prepareAsync()
+            setOnPreparedListener {
+                start()
+            }
+            setOnCompletionListener {
+                onCompletion.invoke()
+            }
+        }
+    }
+    override fun getFileUrlFromFirebaseStorage(fileName: String, onResult: (UIState<String>) -> Unit) {
+        storageReference.child(fileName).downloadUrl
+            .addOnSuccessListener { uri ->
+                onResult.invoke(UIState.Success(uri.toString()))
+            }
+            .addOnFailureListener { exception ->
+                // Handle the failure to get the download URL
+                exception.localizedMessage?.let { UIState.Failure(it) }?.let { onResult.invoke(it) }
+            }
+    }
+
+    override fun pausePlayback() {
+        mediaPlayer?.pause()
+    }
+
+    override fun stopPlayback() {
+        mediaPlayer?.apply {
+            stop()
+            release()
+        }
+        mediaPlayer = null
+    }
+    override fun seekToPosition(position: Int) {
+        mediaPlayer?.seekTo(position)
+    }
+    override fun currentPlaybackPosition(): Int {
+        return mediaPlayer?.currentPosition ?: 0
     }
 
 }

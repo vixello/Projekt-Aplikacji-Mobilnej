@@ -49,4 +49,19 @@ object AudioUtils {
         }
         return null
     }
+//    fun resolveContentUriToFileUri(contentResolver: ContentResolver, contentUri: Uri): String? {
+////        val contentResolver = applicationContext.contentResolver
+//        val projection = arrayOf(MediaStore.MediaColumns.DATA)
+//        var fileUri: Uri? = null
+//
+//        contentResolver.query(contentUri, projection, null, null, null)?.use { cursor ->
+//            if (cursor.moveToFirst()) {
+//                val columnIndex = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA)
+//                val filePath = cursor.getString(columnIndex)
+//                fileUri = Uri.parse(filePath)
+//            }
+//        }
+//
+//        return fileUri
+//    }
 }
